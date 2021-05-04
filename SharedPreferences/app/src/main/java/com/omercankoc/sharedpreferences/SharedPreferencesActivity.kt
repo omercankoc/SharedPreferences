@@ -9,41 +9,44 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_shared_preferences.*
 
-class MainActivity : AppCompatActivity() {
+class SharedPreferencesActivity : AppCompatActivity() {
 
-    // Definition:
-    var name : String? = null
-    var surname : String? = null
+    // Definition UIs :
+    lateinit var editTextName : EditText
+    lateinit var editTextSurname : EditText
+    lateinit var textViewMessage : TextView
+    lateinit var buttonSave : Button
+    lateinit var buttonDelete : Button
 
-    // Shared Preference Definition:
+    // Definition Variables :
+    private var name : String? = null
+    private var surname : String? = null
+
+    // Definition Shared Preference :
     lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_shared_preferences)
 
-        // Definition and Initialize:
-        val editTextName : EditText = findViewById(R.id.editTextName)
-        val editTextSurname : EditText = findViewById(R.id.editTextSurname)
-        val textViewMessage : TextView = findViewById(R.id.textViewMessage)
-        val buttonSave : Button = findViewById(R.id.buttonSave)
-        val buttonDelete : Button = findViewById(R.id.buttonDelete)
+        // Initialize UIs:
+        editTextName = findViewById(R.id.editTextName)
+        editTextSurname = findViewById(R.id.editTextSurname)
+        textViewMessage = findViewById(R.id.textViewMessage)
+        buttonSave = findViewById(R.id.buttonSave)
+        buttonDelete = findViewById(R.id.buttonDelete)
 
-        // Shared Preference Initialize:
-        //SharedPreferences : Kucuk verileri kaydetmek icin key-value prensibi ile calisan yapi.
-        sharedPreferences = this.getSharedPreferences("com.omercankoc.sharedpreferences",
-            Context.MODE_PRIVATE)
-
-        // Shared Preferences ile tutulan verilerin get operasyonu.
+        // Initialize Shared Preference :
+        sharedPreferences = this.getSharedPreferences("com.omercankoc.sharedpreferences",Context.MODE_PRIVATE)
+        // Get data in Shared Preferences.
         name = sharedPreferences.getString("name","")
         surname = sharedPreferences.getString("surname","")
-
         if(name != "" && surname != ""){
             textViewMessage.text = "Hello $name $surname"
-        }
-        else{
+        } else {
+            textViewMessage.text = "Hello!"
             Toast.makeText(this,"NULL!",Toast.LENGTH_LONG).show()
         }
     }
@@ -51,33 +54,26 @@ class MainActivity : AppCompatActivity() {
     fun onClickSave(view : View){
         name = editTextName.text.toString()
         surname = editTextSurname.text.toString()
-
         if (name != "" && surname != ""){
             textViewMessage.text = "Hello $name $surname"
-
-            // Key-Value veri yapısı ile edit(put) operasyonu.
+            // Edit(put) data in Shared Preferences.
             sharedPreferences!!.edit().putString("name",name).apply()
             sharedPreferences!!.edit().putString("surname",surname).apply()
-            // apply() ve commit() arasindaki fark:
-            //
-        }
-        else
-        {
+        } else {
             Toast.makeText(this,"NULL!",Toast.LENGTH_LONG).show()
         }
     }
 
     fun onClickDelete(view : View){
-
+        // Get data in Shared Preferences.
         name = sharedPreferences.getString("name","")
         surname = sharedPreferences.getString("surname","")
-
         if(name != "" && surname != ""){
+            // Edit(remove) data in Shared Preferences.
             sharedPreferences.edit().remove("name").apply()
             sharedPreferences.edit().remove("surname").apply()
             textViewMessage.text = "Data is removed!"
-        }
-        else{
+        } else {
             Toast.makeText(this,"NULL!",Toast.LENGTH_LONG).show()
         }
     }
