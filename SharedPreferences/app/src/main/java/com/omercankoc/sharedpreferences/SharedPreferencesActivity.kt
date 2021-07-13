@@ -40,6 +40,7 @@ class SharedPreferencesActivity : AppCompatActivity() {
 
         // Initialize Shared Preference :
         sharedPreferences = this.getSharedPreferences("com.omercankoc.sharedpreferences",Context.MODE_PRIVATE)
+        
         // Get data in Shared Preferences.
         name = sharedPreferences.getString("name","")
         surname = sharedPreferences.getString("surname","")
